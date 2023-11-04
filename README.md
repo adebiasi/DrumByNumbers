@@ -2,6 +2,8 @@
 
 Writes simple commands to setup a drum machine.
 
+![https://github.com/adebiasi/DrumByNumbers/blob/main/screenshots/Drum.png](https://github.com/adebiasi/DrumByNumbers/blob/main/screenshots/Drum.png)
+
 ## Available commands
 
 ### Pattern Rhythms
@@ -17,5 +19,6 @@ Writes simple commands to setup a drum machine.
 - Left/right: increase/decrease sound speed
 - Space: Change samples set
 
+## Try it
 
  
