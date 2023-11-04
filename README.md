@@ -13,12 +13,15 @@ Writes simple commands to setup a drum machine.
 
 ### Sample Selection
 - Up/down arrows: select current sample
-- CRTL + SHIFT + Up/down: move current pattern to prev/next sample
+- CRTL + SHIFT + Up/down: switch current pattern to prev/next pattern
 
 ### Configure sound
 - Left/right: increase/decrease sound speed
 - Space: Change samples set
 
 ## Try it
+https://adebiasi.github.io/DrumByNumbers/
 
- 
+## Next improvements
+ - [ ] Shift pattern: For example from [ x . .] to [ . . x]
+ - [ ] Save patterns
