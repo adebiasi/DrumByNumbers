@@ -104,4 +104,45 @@ console.log("euclideanRhythms: "+pulses+" "+steps);
         return calculateLCMList(numbers);
     }
 
+    static processText(currText) {
+
+        const regexEuclideanRhythm = /^\d+,\d+$/;
+        const matchEuclideanRhythm = regexEuclideanRhythm.exec(currText);
+
+        const regexIntervals = /^\d+(\.\d+)+$/;
+        const matchIntervals = regexIntervals.exec(currText);
+        if (matchIntervals) {
+            const numbers = matchIntervals[0].split('.');
+            return RhythmsGenerator.intervals(numbers);
+        } else if (matchEuclideanRhythm) {
+            const numbers = matchEuclideanRhythm[0].split(',');
+            const pulses = parseFloat(numbers[0]);
+            const steps = parseFloat(numbers[1]);
+
+            return RhythmsGenerator.euclideanRhythms(pulses, steps);
+        } else {
+            return RhythmsGenerator.decimalToPattern(currText);
+        }
+    }
+
+
+    static expandText(currText) {
+        const regexCrossRhythm = /^\d+(\:\d+)+$/;
+        const matchCrossRhythm = regexCrossRhythm.exec(currText);
+
+        let list = []
+
+        if (matchCrossRhythm) {
+            const numbers = matchCrossRhythm[0].split(':');
+            let lcm = RhythmsGenerator.calculateLCMForList(numbers);
+            for (let i = 0; i < numbers.length; i++) {
+                list.push(numbers[i] + ',' + lcm);
+            }
+        } else {
+            list.push(currText)
+        }
+
+        return list;
+
+    }
 }

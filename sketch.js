@@ -1,9 +1,8 @@
-let inputTextList;
+let inputTextList = [];
 let currPatternIndex = 0;
-let numberFontSize = 260;
-let binaryFontSize = 15;
-let soundsNames = ["acoustic", "acoustic_legacy", "beatbox", "electro", "hiphop", "r2d2", "world"]
-let sampleNames = ["crash", "hihat", "kick", "openhat", "ride", "snare", "tom1", "tom2", "tom3", "tom4"]
+
+let defaultSoundsNames = ["acoustic", "acoustic_legacy", "beatbox", "electro", "hiphop", "r2d2", "world"]
+let defaultSampleNames = ["crash", "hihat", "kick", "openhat", "ride", "snare", "tom1", "tom2", "tom3", "tom4"]
 
 let currFrame = 0
 let binaryList;
@@ -14,33 +13,27 @@ let currSounds = 0;
 
 let currInputText = ""
 
-function setup() {
-    createCanvas(800, 800);
-    // frameRate(1);
-    textAlign(CENTER, CENTER);
 
-    prepareSounds(soundsNames[0]);
+function setup() {
+    View.setup();
+
+    prepareSounds(defaultSoundsNames[0]);
 
     binaryList = []
     inputTextList = [];
-    for (let i = 0; i < sampleNames.length; i++) {
+    for (let i = 0; i < defaultSampleNames.length; i++) {
         binaryList.push([]);
         inputTextList.push("");
     }
-    intId = setInterval(incrementVariable, timeRate);
+    intId = setInterval(playSamples, timeRate);
 
 }
 
-let sampleSound
-
 function prepareSounds(sound) {
     samples = []
-    // samplesResponses = []
-    // for(let i = 0; i<sampleNames.length; i++){
-    //     samplesResponses[i]="";
-    // }
-    for (let i = 0; i < sampleNames.length; i++) {
-        sampleSound = loadSound('sounds/' + sound + '/' + sampleNames[i] + '.wav', soundLoaded, soundError);
+
+    for (let i = 0; i < defaultSampleNames.length; i++) {
+        loadSound('sounds/' + sound + '/' + defaultSampleNames[i] + '.wav', soundLoaded, soundError);
     }
 
 }
@@ -53,109 +46,15 @@ function soundLoaded(sound) {
 }
 
 function soundError(sound) {
-    // if (sound.isLoaded()) {
-    //     samples.push(sound)
-    //     samples.sort();
-    // }
 }
+
 
 function draw() {
-    background(220);
-    stroke(0, 0, 0)
-    fill(0, 0, 0)
-    textAlign(CENTER)
-    textSize(numberFontSize);
-
-    text(currInputText, width / 2, height * 0.25);
-    // binaryList = RhythmsGenerator.decimalToPatternList(inputTextList);
-    displayBinaryList(binaryList);
-
-
+    View.draw(currInputText, binaryList, samples);
 }
 
-function processText(currText) {
 
-    const regexEuclideanRhythm = /^\d+,\d+$/;
-    const matchEuclideanRhythm = regexEuclideanRhythm.exec(currText);
-
-    const regexIntervals = /^\d+(\.\d+)+$/;
-    const matchIntervals = regexIntervals.exec(currText);
-
-    const regexCrossRhythm = /^\d+(\:\d+)+$/;
-    const matchCrossRhythm = regexCrossRhythm.exec(currText);
-
-    if (matchCrossRhythm) {
-        const numbers = matchCrossRhythm[0].split(':');
-        let lcm = RhythmsGenerator.calculateLCMForList(numbers);
-        console.log("lcm: " + lcm)
-        let list = []
-        for (let i = 0; i < numbers.length; i++) {
-            let res = (RhythmsGenerator.euclideanRhythms(numbers[i], lcm));
-            list.push(res);
-        }
-        console.log(list)
-        return list;
-    } else if (matchIntervals) {
-        const numbers = matchIntervals[0].split('.');
-        console.log(numbers)
-        let res = RhythmsGenerator.intervals(numbers);
-        console.log(res);
-        return res;
-    } else if (matchEuclideanRhythm) {
-        const numbers = matchEuclideanRhythm[0].split(',');
-        const pulses = parseFloat(numbers[0]);
-        const steps = parseFloat(numbers[1]);
-        console.log(pulses)
-        console.log(steps)
-
-        let res = RhythmsGenerator.euclideanRhythms(pulses, steps);
-        console.log(res);
-        return res;
-    } else {
-        return RhythmsGenerator.decimalToPattern(currText);
-    }
-}
-
-function displayBinaryList(binaryList) {
-    textSize(binaryFontSize);
-    textAlign(CENTER)
-    for (let i = 0; i < samples.length; i++) {
-        displayBinary(binaryList[i], i);
-    }
-}
-
-function displayBinary(binaryArray, index) {
-    //background(220);
-    textAlign(CENTER)
-    if (binaryArray == null) return
-    let x = width - 20;
-    for (let i = binaryArray.length - 1; i >= 0; i--) {
-        if (i == (currFrame % binaryArray.length)) {
-            stroke(255, 0, 0)
-            fill(255, 0, 0)
-        } else {
-            stroke(0, 0, 0)
-            fill(0, 0, 0)
-
-        }
-        text(binaryArray[i], x, (height * 0.5) + (index * 30));
-        x -= 25;
-    }
-    if (currPatternIndex == index) {
-        stroke(255, 0, 0)
-        fill(255, 0, 0)
-    } else {
-        stroke(0, 0, 0)
-        fill(0, 0, 0)
-    }
-    textAlign(LEFT)
-    let samplePath = samples[index].file;
-    let sampleNames = samplePath.split('/')
-    let sampleName = sampleNames[sampleNames.length - 1];
-    text(sampleName.split('.')[0], 50, (height * 0.5) + (index * 30));
-}
-
-function incrementVariable() {
+function playSamples() {
     currFrame++;
 
     for (let i = 0; i < samples.length; i++) {
@@ -169,65 +68,101 @@ function play(index, sample) {
 
     if (binaryList[index][currFrame % binaryList[index].length] == 1) {
         sample.play();
-    } else {
-        // sample.stop();
     }
 }
 
 
+function incSampleIndex() {
+    currPatternIndex = (currPatternIndex + 1) % samples.length
+}
+
+function decSampleIndex() {
+    if (currPatternIndex == 0) {
+        currPatternIndex = samples.length - 1
+    } else {
+        currPatternIndex = (currPatternIndex - 1) % samples.length
+    }
+}
+
+const DOWN_KEY_CODE = 40
+const UP_KEY_CODE = 38
+const LEFT_KEY_CODE = 37
+const RIGHT_KEY_CODE = 39
+const SPACE_KEY_CODE = 32
+
+let shiftKey = false;
+let ctrlKey = false;
+
 function keyPressed() {
     console.log(keyCode)
-    if ((keyCode >= 48 && keyCode <= 57) || (/[!@#$%^&*(),.?":{}|<>]/.test(key))) {
-        // Verifica se il tasto premuto è un numero (0-9)
-        // inputNumbers[currNumber] += key;
+
+    if (keyIsDown(SHIFT)) {
+        shiftKey = true;
+    }  if (keyIsDown(CONTROL)) {
+        ctrlKey = true;
+    }
+
+    if (shiftKey && ctrlKey) {
+        let prevSampleIndex = currPatternIndex;
+        let prevText = inputTextList[prevSampleIndex]
+        let prevBinary = binaryList[prevSampleIndex]
+        if(keyCode === DOWN_ARROW){
+            console.log("Shift + Ctrl + Freccia giù premuti contemporaneamente.");
+            incSampleIndex();
+        }else if(keyCode === UP_ARROW){
+            console.log("Shift + Ctrl + Freccia su premuti contemporaneamente.");
+            decSampleIndex();
+        }
+        inputTextList[prevSampleIndex] = inputTextList[currPatternIndex]
+        binaryList[prevSampleIndex] = binaryList[currPatternIndex]
+        inputTextList[currPatternIndex] = prevText;
+        binaryList[currPatternIndex] = prevBinary;
+        // incSampleIndex();
+    } else if ((keyCode >= 48 && keyCode <= 57) || (/[!@#$%^&*(),.?":{}|<>]/.test(key))) {
         currInputText += key;
     } else if (keyCode === BACKSPACE) {
-        // Se premi il tasto BACKSPACE, rimuovi l'ultimo carattere
-        // inputNumbers[currNumber] = inputNumbers[currNumber].slice(0, -1);
         currInputText = currInputText.slice(0, -1);
     } else if (keyCode === 13) {
+        let expandedTextList = RhythmsGenerator.expandText(currInputText)
 
-        inputTextList[currPatternIndex] = currInputText;
-        let processedText = processText(currInputText);
         currInputText = "";
 
-        if (Array.isArray(processedText[0])) {
-            console.log("is array: "+processedText[0])
-            for (let i = 0; i < processedText.length; i++) {
-                console.log("is array: "+processedText[i])
-                binaryList[currPatternIndex] = processedText[i];
-                currPatternIndex = (currPatternIndex + 1) % samples.length
+        for (let i = 0; i < expandedTextList.length; i++) {
+            let processedText = RhythmsGenerator.processText(expandedTextList[i]);
 
-            }
-        } else {
-            console.log("is number: "+processedText)
-
-            binaryList[currPatternIndex] = processedText
-            currPatternIndex = (currPatternIndex + 1) % samples.length
-
-        }
-    } else if (keyCode === 40) {
-        currPatternIndex = (currPatternIndex + 1) % samples.length
-        currInputText = inputTextList[currPatternIndex];
-
-    } else if (keyCode === 38) {
-        if (currPatternIndex == 0) {
-            currPatternIndex = samples.length - 1
-        } else {
-            currPatternIndex = (currPatternIndex - 1) % samples.length
+            inputTextList[currPatternIndex] = expandedTextList[i];
+            binaryList[currPatternIndex] = processedText;
+            incSampleIndex();
         }
         currInputText = inputTextList[currPatternIndex];
 
-    } else if (keyCode === 37) {
+    } else if (keyCode === DOWN_KEY_CODE) {
+        incSampleIndex();
+        currInputText = inputTextList[currPatternIndex];
+
+    } else if (keyCode === UP_KEY_CODE) {
+        decSampleIndex();
+        currInputText = inputTextList[currPatternIndex];
+
+    } else if (keyCode === LEFT_KEY_CODE) {
         timeRate += 25;
         clearInterval(intId)
-        intId = setInterval(incrementVariable, timeRate);
-    } else if (keyCode === 39) {
+        intId = setInterval(playSamples, timeRate);
+    } else if (keyCode === RIGHT_KEY_CODE) {
         timeRate -= 25;
         clearInterval(intId)
-        intId = setInterval(incrementVariable, timeRate);
-    } else if (keyCode === 32) {
+        intId = setInterval(playSamples, timeRate);
+    } else if (keyCode === SPACE_KEY_CODE) {
         currSounds++;
-        prepareSounds(soundsNames[currSounds % soundsNames.length]);
+        prepareSounds(defaultSoundsNames[currSounds % defaultSoundsNames.length]);
+    }
+
+}
+
+function keyReleased() {
+    if (keyCode === SHIFT) {
+        shiftKey = false;
+    } else if (keyCode === CONTROL) {
+        ctrlKey = false;
     }
 }
