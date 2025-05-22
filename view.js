@@ -30,7 +30,7 @@ class View {
         textAlign(CENTER, CENTER);
     }
 
-    static draw(currInputText, binaryList, samples) {
+    static draw(currInputText, binaryList, samples, timeRate) {
 
         background(BACKGROUND_COLOR);
         stroke(0, 0, 0)
@@ -41,6 +41,8 @@ class View {
         text(currInputText, POS_TYPED_TEXT_DISPLAY_X, POS_TYPED_TEXT_DISPLAY_Y);
 
         View.displayBinaryList(binaryList, samples);
+
+        View.displayTimeRate(timeRate)
     }
 
     static displayBinaryList(binaryList, samples) {
@@ -85,5 +87,16 @@ class View {
         let sampleNames = samplePath.split('/')
         let sampleName = sampleNames[sampleNames.length - 1];
         text(sampleName.split('.')[0], POS_RHYTHM_NAME_DISPLAY_X, POS_RHYTHM_DISPLAY_Y + (index * SPACE_RHYTHM_DISPLAY_Y));
+    }
+
+    static displayTimeRate(timeRate) {
+        // Visualizza timeRate in ms in alto a destra
+        fill(0);
+        noStroke();
+        textSize(16);
+        let timeRateText = `Time Rate: ${timeRate} ms`;
+        let xPos = width - textWidth(timeRateText) ;
+        let yPos = 20; // 20 px dall'alto
+        text(timeRateText, xPos, yPos);
     }
 }

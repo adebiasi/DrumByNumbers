@@ -50,7 +50,7 @@ function soundError(sound) {
 
 
 function draw() {
-    View.draw(currInputText, binaryList, samples);
+    View.draw(currInputText, binaryList, samples, timeRate);
 }
 
 
@@ -98,7 +98,8 @@ function keyPressed() {
 
     if (keyIsDown(SHIFT)) {
         shiftKey = true;
-    }  if (keyIsDown(CONTROL)) {
+    }
+    if (keyIsDown(CONTROL)) {
         ctrlKey = true;
     }
 
@@ -106,10 +107,10 @@ function keyPressed() {
         let prevSampleIndex = currPatternIndex;
         let prevText = inputTextList[prevSampleIndex]
         let prevBinary = binaryList[prevSampleIndex]
-        if(keyCode === DOWN_ARROW){
+        if (keyCode === DOWN_ARROW) {
             console.log("Shift + Ctrl + Freccia giù premuti contemporaneamente.");
             incSampleIndex();
-        }else if(keyCode === UP_ARROW){
+        } else if (keyCode === UP_ARROW) {
             console.log("Shift + Ctrl + Freccia su premuti contemporaneamente.");
             decSampleIndex();
         }
@@ -118,7 +119,10 @@ function keyPressed() {
         inputTextList[currPatternIndex] = prevText;
         binaryList[currPatternIndex] = prevBinary;
         // incSampleIndex();
-    } else if ((keyCode >= 48 && keyCode <= 57) || (/[!@#$%^&*(),.?":{}|<>]/.test(key))) {
+    } else if (
+        (keyCode >= 48 && keyCode <= 57) ||
+        (/[!@#$%^&*(),.?":{}|<>]/.test(key)) ||
+        key == 'm') {
         currInputText += key;
     } else if (keyCode === BACKSPACE) {
         currInputText = currInputText.slice(0, -1);

@@ -74,6 +74,53 @@ console.log("euclideanRhythms: "+pulses+" "+steps);
         return rhythm.split('');
     }
 
+    static generaArray(config, x) {
+        const n = config.length;
+        const probMap = {'L': 0.1, 'M': 0.4, 'H': 0.8};
+
+        // Mappa la configurazione nei pesi
+        const pesi = config.map(c => probMap[c] || 0);
+
+        // Normalizza i pesi
+        const somma = pesi.reduce((a, b) => a + b, 0);
+        const distribuzione = pesi.map(p => p / somma);
+
+        // Estrai x indici con probabilità pesata (senza ripetizioni)
+        const selezionati = RhythmsGenerator.weightedSample(distribuzione, x);
+
+        // Costruisci l'array finale
+        const risultato = Array(n).fill(0);
+        selezionati.forEach(i => risultato[i] = 1);
+
+        return risultato;
+    }
+
+// Funzione di campionamento pesato senza ripetizioni
+    static weightedSample(prob, count) {
+        const n = prob.length;
+        const scelti = new Set();
+
+        while (scelti.size < count) {
+            let r = Math.random();
+            let somma = 0;
+
+            for (let i = 0; i < n; i++) {
+                somma += prob[i];
+                if (r <= somma && !scelti.has(i)) {
+                    scelti.add(i);
+                    break;
+                }
+            }
+        }
+
+        return Array.from(scelti);
+    }
+
+    static rhythmDistribution(x) {
+            const config = ['M', 'M', 'H', 'L', 'H', 'M', 'M', 'H', 'M', 'M', 'L', 'H', 'M', 'M', 'H', 'M'];
+        return this.generaArray(config, x)
+    }
+
     static calculateLCMForList(numbers) {
         // Function to calculate the GCD of two numbers
         function calculateGCD(x, y) {
@@ -111,6 +158,9 @@ console.log("euclideanRhythms: "+pulses+" "+steps);
 
         const regexIntervals = /^\d+(\.\d+)+$/;
         const matchIntervals = regexIntervals.exec(currText);
+
+        const regexDistribution = /m(\d+)/;
+        const matchDistribution = regexDistribution.exec(currText);
         if (matchIntervals) {
             const numbers = matchIntervals[0].split('.');
             return RhythmsGenerator.intervals(numbers);
@@ -120,6 +170,10 @@ console.log("euclideanRhythms: "+pulses+" "+steps);
             const steps = parseFloat(numbers[1]);
 
             return RhythmsGenerator.euclideanRhythms(pulses, steps);
+        } else if (matchDistribution) {
+            const number = matchDistribution[1];
+            console.log(number)
+            return RhythmsGenerator.rhythmDistribution(number)
         } else {
             return RhythmsGenerator.decimalToPattern(currText);
         }
