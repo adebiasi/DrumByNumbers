@@ -77,6 +77,13 @@ Experience the sequencer live in your browser here:
 
 ---
 
+### Sound Samples Attribution
+
+The drum samples used in this project are derived from the [`drumr`](https://cran.r-project.org/web/packages/drumr/readme/README.html) R package, which provides a collection of freely available percussive audio samples.  
+Special thanks to the creators for making them accessible to the community.
+
+---
+
 ## Next improvements
  - [ ] Shift pattern: For example from [ x . .] to [ . . x]
  - [ ] Save patterns
