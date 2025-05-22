@@ -30,8 +30,6 @@ Define the spacing between hits using numbers separated by dots.
 **Visual:** `[x . . . . x . x]`  
 Where `x` is a hit (1) and `.` is a rest (0).
 
-
-
 ### Euclidean Rhythm
 
 Distributes pulses as evenly as possible across total steps.  
@@ -42,7 +40,6 @@ Distributes pulses as evenly as possible across total steps.
 
 This method is based on the algorithm described in the paper *"The Euclidean Algorithm Generates Traditional Musical Rhythms"* by Godfried Toussaint, which demonstrates how the Euclidean algorithm can be used to create many traditional and common rhythmic patterns found in world music.
 
-
 ### Cross-beat Rhythms
 
 Combine multiple Euclidean rhythms with a common number of steps, calculated as the Least Common Multiple (LCM) of the individual step counts.  
@@ -52,7 +49,6 @@ Combine multiple Euclidean rhythms with a common number of steps, calculated as 
 - Rhythm 1 (3,12): `[x . . . x . . . x . . .]`  
 - Rhythm 2 (4,12): `[x . . x . . x . . x . .]`
 
----
 ### Weighted Distribution
 
 Generate a pattern with a specified number of hits distributed probabilistically based on intensity weights assigned to each step. The distribution pattern is based on the sequence:
