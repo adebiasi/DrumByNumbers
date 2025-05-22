@@ -30,7 +30,7 @@ Define the spacing between hits using numbers separated by dots.
 **Visual:** `[x . . . . x . x]`  
 Where `x` is a hit (1) and `.` is a rest (0).
 
----
+
 
 ### Euclidean Rhythm
 
@@ -40,7 +40,8 @@ Distributes pulses as evenly as possible across total steps.
 **Result:** A 13-step pattern with 5 evenly distributed hits.  
 **Visual:** `[x . . x . x . . x . x . .]`
 
----
+This method is based on the algorithm described in the paper *"The Euclidean Algorithm Generates Traditional Musical Rhythms"* by Godfried Toussaint, which demonstrates how the Euclidean algorithm can be used to create many traditional and common rhythmic patterns found in world music.
+
 
 ### Cross-beat Rhythms
 
