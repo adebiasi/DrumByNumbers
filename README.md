@@ -26,7 +26,7 @@ This project is a sample-based drum sequencer driven by rhythmic patterns genera
 
 Define the spacing between hits using numbers separated by dots.  
 **Example:** `1.5.2`  
-**Result:** A pattern where the first hit is immediate, then a 5-step pause, then another hit after 2 steps.  
+**Result:** A pattern where the first hit is immediate, then (1-1) pauses, then another hit, then (5-1) pauses, then another hit, then (2-1) pauses.  
 **Visual:** `[x . . . . x . x]`  
 Where `x` is a hit (1) and `.` is a rest (0).
 
