@@ -56,7 +56,7 @@ Combine multiple Euclidean rhythms with a common number of steps, calculated as 
 ### Weighted Distribution
 
 Generate a pattern with a specified number of hits distributed probabilistically based on intensity weights assigned to each step. The distribution pattern is based on the sequence:
-`['M', 'M', 'H', 'L', 'H', 'M', 'M', 'H', 'M', 'M', 'L', 'H', 'M', 'M', 'H', 'M']`
+`[M M H L H M M H M M L H M M H M]`
 
 This pattern is taken from the book *THE RHYTHM CODE* by Tamas Bodzsar.
 
